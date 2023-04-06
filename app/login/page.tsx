@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import logo from '../../public/logo.svg';
-import { LoginForm } from '../../components/loginform';
+import { LoginForm } from '~/components/loginform';
 
 /* eslint-disable react/no-unescaped-entities */
 export default function LoginPage() {

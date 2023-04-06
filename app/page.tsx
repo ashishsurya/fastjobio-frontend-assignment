@@ -1,11 +1,14 @@
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { ApiButton } from '~/components/apibutton';
 
-export default async function Home() {
-  const cookieStore = cookies();
-  const authToken = cookieStore.get('authToken');
+export default function Home() {
+  // const cookieStore = cookies();
+  // const authToken = cookieStore.get('Set-Cookie');
 
-  if (authToken === undefined) redirect('/login');
+  // if (authToken === undefined) redirect('/login');
 
-  return <div className='min-h-screen'>Hello</div>;
+  return (
+    <div className='min-h-screen grid place-items-center'>
+      <ApiButton />
+    </div>
+  );
 }

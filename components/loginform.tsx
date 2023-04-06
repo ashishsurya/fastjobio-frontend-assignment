@@ -1,10 +1,8 @@
 'use client';
-
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { FormEvent, createRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { getAuthToken } from '~/utils/getAuthToken';
+import axios from 'axios';
 
 export const LoginForm = () => {
   const usernameRef = createRef<HTMLInputElement>();
@@ -15,24 +13,20 @@ export const LoginForm = () => {
     e.preventDefault();
     const username = usernameRef.current?.value;
     const password = passwordRef.current?.value;
-
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({ username, password }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response = await axios.post('/api/auth/login', {
+      username,
+      password,
     });
 
-    const authToken = getAuthToken(Cookies.get('authToken')?.split(';')[0]);
-    console.log(authToken);
-    const data = await res.json();
-    console.log(res);
-    if (data.message === 'Unauthorized') {
-      toast.error(data.message + 'please check your credentials');
+    console.log(response.status);
+
+    if (response.status === 401) {
+      toast.error('Invalid credentials');
     } else {
-      router.replace('/');
+      toast.success('Login successful');
+      // setTimeout(() => {
+      //   router.replace('/');
+      // }, 1500);
     }
   };
 
@@ -43,6 +37,8 @@ export const LoginForm = () => {
         in touch
       </p>
       <form
+        // action='/api/auth/login'
+        // method='POST'
         onSubmit={handleSubmit}
         className='flex flex-col space-y-3 self-stretch w-3/5 mx-auto'
       >
@@ -51,6 +47,7 @@ export const LoginForm = () => {
             Username
           </label>
           <input
+            // name='username'
             ref={usernameRef}
             type='text'
             id='username'
@@ -63,6 +60,7 @@ export const LoginForm = () => {
           </label>
           <input
             ref={passwordRef}
+            name='password'
             type='password'
             id='password'
             className='focus:outline-none w-full bg-transparent border-slate-200 border-2 px-4 py-2 rounded-2xl'

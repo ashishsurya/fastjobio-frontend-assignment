@@ -1,23 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server';
-export async function POST(req: NextRequest) {
+import axios from 'axios';
+import {} from 'next/server';
+
+export async function POST(req: Request) {
+  console.log('API/AUTH/LOGIN/POST');
   const { username, password } = await req.json();
-  const response = await fetch(
+  console.log({ username, password });
+  const response = await axios.post(
     'https://frontendtestapi.staging.fastjobs.io/auth/login',
     {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({ username, password }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      username,
+      password,
     }
   );
 
-  const setCookieHeader = response.headers.get('Set-Cookie');
-  console.log(setCookieHeader);
-  var res = new NextResponse(response.body);
-  if (setCookieHeader) {
-    res.cookies.set('authToken', setCookieHeader);
-  }
-  return res;
+  const setcookieheader = response.headers['set-cookie'];
+
+  console.log(setcookieheader);
+
+  // const setcookieheader = response.headers.get('Set-Cookie');
+  // if (setcookieheader) {
+  //   console.log(setcookieheader);
+  // }
+  return new Response(JSON.stringify(response.data), {
+    status: response.status,
+  });
+  // return NextResponse.json({ x: 'y' });
 }
