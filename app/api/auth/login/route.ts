@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {} from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   console.log('API/AUTH/LOGIN/POST');
@@ -10,10 +10,18 @@ export async function POST(req: Request) {
     {
       username,
       password,
+    },
+    {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     }
   );
 
-  const setcookieheader = response.headers['set-cookie'];
+  
+
+  const setcookieheader = response.headers;
 
   console.log(setcookieheader);
 
@@ -21,8 +29,10 @@ export async function POST(req: Request) {
   // if (setcookieheader) {
   //   console.log(setcookieheader);
   // }
-  return new Response(JSON.stringify(response.data), {
-    status: response.status,
-  });
+  // return new Response(JSON.stringify(response.data), {
+  //   status: response.data.code || 200,
+  // });
+
+  // return new NextResponse(JSON.stringify({ message: ' success' }));
   // return NextResponse.json({ x: 'y' });
 }

@@ -11,22 +11,30 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const username = usernameRef.current?.value;
-    const password = passwordRef.current?.value;
-    const response = await axios.post('/api/auth/login', {
-      username,
-      password,
-    });
+    try {
+      const username = usernameRef.current?.value;
+      const password = passwordRef.current?.value;
+      const response = await axios.post(
+        '/api/auth/login',
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log(response.headers);
+      console.log(response.data);
 
-    console.log(response.status);
-
-    if (response.status === 401) {
-      toast.error('Invalid credentials');
-    } else {
-      toast.success('Login successful');
-      // setTimeout(() => {
-      //   router.replace('/');
-      // }, 1500);
+      if (response.status === 401) {
+        toast.error('Invalid credentials');
+      } else {
+        toast.success('Login successful');
+        // setTimeout(() => {
+        //   router.replace('/');
+        // }, 1500);
+      }
+    } catch (err: any) {
+      toast.error('username or password cannot be emtpy');
     }
   };
 
